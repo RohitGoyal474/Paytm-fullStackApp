@@ -1,14 +1,19 @@
 // backend/index.js
-const express = require("express");
-const cors = require("cors");
-const rootRouter = require("./routes/index");
+import dotenv from "dotenv";
+dotenv.config();
+import connectDB from "./db/index.js";
+import { app } from "./app.js";
+//////////////////
 
-const app = express();
+connectDB()
+.then(()=>{
+        app.listen(process.env.PORT, ()=>{
+            console.log(`Server started on port ${process.env.PORT}`);
+        })
+})
+.catch((err)=>{
 
-app.use(cors());
-app.use(express.json());
+    console.log("Do not able to connect to server",err);
+})
 
-app.use("/api/v1", rootRouter);
 
-app.listen(3000);
-console.log("Server started on port 3000");
